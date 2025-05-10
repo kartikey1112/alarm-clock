@@ -1,28 +1,33 @@
 import { useEffect, useState } from "react";
 
-function App() {
+
+
+const App =()=>{
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
-  useEffect(() => {
-    let Interval;
-    if (isRunning) {
-      Interval = setInterval(() => setTime((prev) => prev + 10), 10);
-    }
-    return () => clearInterval(Interval);
-  }, [isRunning]);
+  useEffect(()=>{
+    let interval;
+    if(isRunning){
+    interval = setInterval(()=>{
+      setTime((prev)=>prev+10)
+    },10);
+  }
 
-  const formatTime = () => {
-    const hours = Math.floor(time / 1000 / 3600);
-    const minutes = Math.floor(time / 1000 / 60);
-    const seconds = Math.floor((time % 60000) / 1000);
+    return ()=>clearInterval(interval)
 
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-      2,
-      "0"
-    )}:${String(seconds).padStart(2, "0")}`;
+  },[isRunning])
+
+  const formatTime = (time) => {
+    const hours = Math.floor(time / (3600 * 1000));
+    const minutes = Math.floor((time % (3600 * 1000)) / (60 * 1000));
+    const seconds = Math.floor((time % (60 * 1000)) / 1000);
+  
+    const format = (unit) => String(unit).padStart(2, '0');
+  
+    return `${format(hours)}:${format(minutes)}:${format(seconds)}`;
   };
-
+  
   return (
     <div className="App w-full h-screen">
       <div className="h-full w-full flex items-center flex-col justify-center gap-4">
@@ -49,10 +54,11 @@ function App() {
           >
             reset
           </button>
-        </div>
+    </div>
       </div>
     </div>
   );
 }
+
 
 export default App;
